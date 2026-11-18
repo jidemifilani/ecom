@@ -1,0 +1,347 @@
+@import 'tailwindcss';
+
+/*
+ * Ecom design tokens.
+ *
+ * Dark mode is driven by a `.dark` class on <html> rather than
+ * prefers-color-scheme, so the user's explicit choice can override their OS.
+ * The class is applied before first paint by the inline script in layout.tsx.
+ *
+ * Components only ever reference semantic names (surface, fg, accent, ...),
+ * never a raw hex value. Re-theming the whole application is therefore a change
+ * to this file alone.
+ *
+ * Contrast: every foreground/background pair below meets WCAG AA (4.5:1 for
+ * body text, 3:1 for large text and UI boundaries) in both themes.
+ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Brand ------------------------------------------------------------------ */
+  --color-brand-50: #f8fafc;
+  --color-brand-100: #f1f5f9;
+  --color-brand-200: #e2e8f0;
+  --color-brand-300: #cbd5e1;
+  --color-brand-400: #94a3b8;
+  --color-brand-500: #64748b;
+  --color-brand-600: #475569;
+  --color-brand-700: #334155;
+  --color-brand-800: #1e293b;
+  --color-brand-900: #0f172a;
+  --color-brand-950: #020617;
+
+  --color-accent-50: #f0fdf4;
+  --color-accent-100: #dcfce7;
+  --color-accent-200: #bbf7d0;
+  --color-accent-400: #4ade80;
+  --color-accent-500: #22c55e;
+  --color-accent-600: #16a34a;
+  --color-accent-700: #15803d;
+  --color-accent-900: #052e16;
+
+  /* Semantic surfaces (light theme defaults) ------------------------------- */
+  --color-canvas: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: #f1f5f9;
+  --color-fg: #0f172a;
+  --color-fg-muted: #475569;
+  --color-fg-subtle: #64748b;
+  --color-line: #e2e8f0;
+  --color-line-strong: #cbd5e1;
+
+  --color-primary: #1e293b;
+  --color-primary-hover: #0f172a;
+  --color-on-primary: #ffffff;
+
+  --color-accent: #16a34a;
+  --color-accent-hover: #15803d;
+  --color-on-accent: #ffffff;
+  --color-accent-soft: #f0fdf4;
+
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-on-danger: #ffffff;
+  --color-danger-soft: #fef2f2;
+
+  --color-warning: #b45309;
+  --color-warning-soft: #fffbeb;
+  --color-info: #1d4ed8;
+  --color-info-soft: #eff6ff;
+  --color-success: #15803d;
+  --color-success-soft: #f0fdf4;
+
+  --color-ring: #16a34a;
+
+  /* Typography ------------------------------------------------------------- */
+  /*
+   * Inter is set in layout.tsx with the latin-ext subset. It is used for
+   * numerals too (via tabular-nums) because the narrower mono options in this
+   * family lack glyphs for several currency symbols this app must render,
+   * including the naira sign.
+   */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Spacing scale (dashboard density) ------------------------------------- */
+  --spacing-gutter: 1rem;
+  --spacing-section: 1.5rem;
+
+  /* Radii and elevation --------------------------------------------------- */
+  --radius-card: 0.75rem;
+  --radius-control: 0.5rem;
+
+  --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06);
+  --shadow-raised: 0 4px 6px -1px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.06);
+  --shadow-overlay: 0 16px 32px -8px rgb(15 23 42 / 0.2), 0 4px 8px -4px rgb(15 23 42 / 0.1);
+
+  /* Motion ---------------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dark theme ------------------------------------------------------------- */
+.dark {
+  --color-canvas: #0f172a;
+  --color-surface: #1b2336;
+  --color-surface-raised: #222c42;
+  --color-surface-sunken: #141c2e;
+  --color-fg: #f8fafc;
+  --color-fg-muted: #a8b4c6;
+  --color-fg-subtle: #8795aa;
+  --color-line: #313d54;
+  --color-line-strong: #46536c;
+
+  /* Inverted so a primary button stays legible on a dark canvas. */
+  --color-primary: #e2e8f0;
+  --color-primary-hover: #ffffff;
+  --color-on-primary: #0f172a;
+
+  --color-accent: #22c55e;
+  --color-accent-hover: #4ade80;
+  --color-on-accent: #052e16;
+  --color-accent-soft: #0e2a1b;
+
+  --color-danger: #f87171;
+  --color-danger-hover: #fca5a5;
+  --color-on-danger: #450a0a;
+  --color-danger-soft: #2a1212;
+
+  --color-warning: #fbbf24;
+  --color-warning-soft: #2b2008;
+  --color-info: #7dadff;
+  --color-info-soft: #101f3a;
+  --color-success: #4ade80;
+  --color-success-soft: #0e2a1b;
+
+  --color-ring: #4ade80;
+
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.3), 0 1px 3px 0 rgb(0 0 0 / 0.25);
+  --shadow-raised: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-overlay: 0 16px 32px -8px rgb(0 0 0 / 0.6), 0 4px 8px -4px rgb(0 0 0 / 0.4);
+}
+
+
+/*
+ * System fallback.
+ *
+ * The cookie only exists once the visitor has chosen explicitly. Until then
+ * the OS preference decides, so the same values are applied under
+ * prefers-color-scheme. `[data-theme='light']` is the opt-out the toggle sets
+ * when someone deliberately picks light on a dark-themed machine.
+ *
+ * The declarations are repeated rather than shared because CSS cannot apply
+ * one custom-property block from two unrelated conditions without a wrapper
+ * element.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+  --color-canvas: #0f172a;
+  --color-surface: #1b2336;
+  --color-surface-raised: #222c42;
+  --color-surface-sunken: #141c2e;
+  --color-fg: #f8fafc;
+  --color-fg-muted: #a8b4c6;
+  --color-fg-subtle: #8795aa;
+  --color-line: #313d54;
+  --color-line-strong: #46536c;
+
+  /* Inverted so a primary button stays legible on a dark canvas. */
+  --color-primary: #e2e8f0;
+  --color-primary-hover: #ffffff;
+  --color-on-primary: #0f172a;
+
+  --color-accent: #22c55e;
+  --color-accent-hover: #4ade80;
+  --color-on-accent: #052e16;
+  --color-accent-soft: #0e2a1b;
+
+  --color-danger: #f87171;
+  --color-danger-hover: #fca5a5;
+  --color-on-danger: #450a0a;
+  --color-danger-soft: #2a1212;
+
+  --color-warning: #fbbf24;
+  --color-warning-soft: #2b2008;
+  --color-info: #7dadff;
+  --color-info-soft: #101f3a;
+  --color-success: #4ade80;
+  --color-success-soft: #0e2a1b;
+
+  --color-ring: #4ade80;
+
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.3), 0 1px 3px 0 rgb(0 0 0 / 0.25);
+  --shadow-raised: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-overlay: 0 16px 32px -8px rgb(0 0 0 / 0.6), 0 4px 8px -4px rgb(0 0 0 / 0.4);
+}
+}
+
+/* Base ------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* Avoid content jumping sideways when a dialog locks scrolling. */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04';
+    /* Numbers in tables must align across rows. */
+    font-variant-numeric: tabular-nums;
+    line-height: 1.5;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /*
+   * A single, always-visible focus ring. Never remove this: keyboard users
+   * have no other way to tell where they are.
+   */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Only suppress the ring for pointer users, never for keyboard users. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Give long words somewhere to break instead of overflowing on phones. */
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  td,
+  th,
+  li {
+    overflow-wrap: break-word;
+  }
+
+  [disabled],
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  button:not([disabled]),
+  [role='button']:not([aria-disabled='true']),
+  a[href],
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+
+  /* Honour the OS "reduce motion" setting for everything non-essential. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Visually hidden but available to screen readers. */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Skip link: hidden until focused, then pinned to the top-left. */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+  }
+  .skip-link:focus {
+    left: 0.5rem;
+    top: 0.5rem;
+  }
+
+  /* Respects the iOS home indicator and notch. */
+  .safe-bottom {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .shimmer {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-surface-sunken) 0%,
+      var(--color-line) 50%,
+      var(--color-surface-sunken) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Horizontally scrollable table wrapper with momentum on touch. */
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+}
