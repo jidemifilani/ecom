@@ -1,0 +1,1058 @@
+<title>Ecom Platform Reference</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* Layout: sticky sidebar TOC + scrollable content on desktop, stacked on mobile */
+:root {
+  --bg:       #0f1117;
+  --bg2:      #161b27;
+  --bg3:      #1e2535;
+  --border:   #2a3350;
+  --fg:       #e2e8f4;
+  --fg2:      #8b96b0;
+  --fg3:      #5a6680;
+  --accent:   #6c8eff;
+  --accent2:  #3d5aff;
+  --green:    #34d399;
+  --amber:    #fbbf24;
+  --red:      #f87171;
+  --mono:     'JetBrains Mono', 'Cascadia Code', monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:     #f8f9fc;
+    --bg2:    #ffffff;
+    --bg3:    #eef1f8;
+    --border: #d4dae8;
+    --fg:     #1a2035;
+    --fg2:    #4a5570;
+    --fg3:    #8b96b0;
+    --accent: #3a5ce8;
+    --accent2:#1e3ec9;
+    --green:  #059669;
+    --amber:  #d97706;
+    --red:    #dc2626;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg:     #f8f9fc;
+  --bg2:    #ffffff;
+  --bg3:    #eef1f8;
+  --border: #d4dae8;
+  --fg:     #1a2035;
+  --fg2:    #4a5570;
+  --fg3:    #8b96b0;
+  --accent: #3a5ce8;
+  --accent2:#1e3ec9;
+  --green:  #059669;
+  --amber:  #d97706;
+  --red:    #dc2626;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+/* ── layout ── */
+.shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0 32px;
+  min-height: 100dvh;
+}
+
+.top-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 0 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+
+.logo {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.3px;
+  color: var(--fg);
+}
+.logo span { color: var(--accent); }
+
+.top-links { margin-left: auto; display: flex; gap: 10px; }
+.pill {
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  color: var(--fg2);
+  transition: color .15s, border-color .15s;
+}
+.pill:hover { color: var(--accent); border-color: var(--accent); }
+.pill.live { border-color: var(--green); color: var(--green); }
+
+/* ── sidebar ── */
+nav {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+  padding: 0 0 40px;
+}
+
+nav h3 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--fg3);
+  margin: 0 0 8px;
+}
+
+nav ul { list-style: none; padding: 0; margin: 0 0 20px; }
+nav li { margin: 1px 0; }
+nav a {
+  display: block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--fg2);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color .12s, background .12s;
+}
+nav a:hover { color: var(--fg); background: var(--bg3); }
+nav a.active { color: var(--accent); border-left-color: var(--accent); background: var(--bg3); }
+
+/* ── main content ── */
+main { min-width: 0; padding-bottom: 60px; }
+
+section { margin-bottom: 44px; scroll-margin-top: 24px; }
+
+h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  text-wrap: balance;
+}
+
+h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg2);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin: 20px 0 10px;
+}
+
+p { margin: 0 0 10px; color: var(--fg2); }
+
+/* ── stat row ── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.stat-num {
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.stat-label {
+  font-size: 11.5px;
+  color: var(--fg3);
+  margin-top: 3px;
+}
+
+/* ── chip / badge ── */
+.chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--bg3);
+  color: var(--fg2);
+  border: 1px solid var(--border);
+}
+.chip.green { background: color-mix(in srgb, var(--green) 12%, transparent); color: var(--green); border-color: color-mix(in srgb, var(--green) 30%, transparent); }
+.chip.blue  { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+.chip.amber { background: color-mix(in srgb, var(--amber) 12%, transparent); color: var(--amber); border-color: color-mix(in srgb, var(--amber) 30%, transparent); }
+.chip.red   { background: color-mix(in srgb, var(--red) 12%, transparent); color: var(--red); border-color: color-mix(in srgb, var(--red) 30%, transparent); }
+
+/* ── code / mono ── */
+code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--bg3);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+pre {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--fg2);
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+
+/* ── tables ── */
+.tbl-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 16px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+thead th {
+  background: var(--bg3);
+  color: var(--fg3);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--bg3); }
+td { padding: 8px 14px; color: var(--fg2); vertical-align: top; }
+td code { font-size: 11.5px; }
+
+/* ── two column grid ── */
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+/* ── card ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 8px;
+}
+.card ul { margin: 0; padding-left: 16px; }
+.card li { color: var(--fg2); font-size: 12.5px; margin-bottom: 3px; }
+
+/* ── route list ── */
+.route-group { margin-bottom: 16px; }
+.route-group-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--fg3);
+  margin-bottom: 6px;
+}
+.route-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.route-row:last-child { border-bottom: none; }
+.method {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  min-width: 40px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-align: center;
+}
+.GET    { background: color-mix(in srgb, var(--green) 12%, transparent); color: var(--green); }
+.POST   { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
+.PATCH  { background: color-mix(in srgb, var(--amber) 12%, transparent); color: var(--amber); }
+.DELETE { background: color-mix(in srgb, var(--red) 12%, transparent); color: var(--red); }
+.route-path { font-family: var(--mono); font-size: 12px; color: var(--fg); min-width: 0; }
+.route-desc { font-size: 12px; color: var(--fg3); }
+
+/* ── env table ── */
+.env-required { color: var(--red); font-size: 11px; }
+.env-optional { color: var(--fg3); font-size: 11px; }
+
+/* ── perm grid ── */
+.perm-group { margin-bottom: 18px; }
+.perm-group-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.perm-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.perm-key {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--fg2);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+
+/* ── role table ── */
+.role-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.role-row:last-child { border-bottom: none; }
+.role-name { font-weight: 600; color: var(--fg); min-width: 110px; font-size: 13px; }
+.role-count { font-family: var(--mono); color: var(--accent); font-size: 12px; min-width: 50px; }
+.role-desc { color: var(--fg3); font-size: 12.5px; }
+
+/* ── model grid ── */
+.model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 7px; }
+.model-chip {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--fg2);
+}
+.model-chip.auth   { border-left: 3px solid var(--accent); }
+.model-chip.catalog{ border-left: 3px solid var(--green); }
+.model-chip.order  { border-left: 3px solid var(--amber); }
+.model-chip.sys    { border-left: 3px solid var(--fg3); }
+
+/* ── responsive ── */
+@media (max-width: 700px) {
+  .shell { grid-template-columns: 1fr; }
+  nav { position: static; padding-bottom: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  nav ul { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0; }
+  nav li { margin: 0; }
+  nav a { padding: 4px 8px; font-size: 12px; }
+  .cols2, .cols3 { grid-template-columns: 1fr; }
+  .top-bar { flex-wrap: wrap; }
+  .route-row { flex-direction: column; gap: 2px; }
+}
+</style>
+
+<div class="shell">
+
+  <!-- top bar -->
+  <header class="top-bar">
+    <div class="logo">Ecom <span>Platform</span></div>
+    <div style="color:var(--fg3);font-size:12px;">Full-stack e-commerce · Next.js 16 · Prisma 7 · Neon PostgreSQL</div>
+    <div class="top-links">
+      <a class="pill live" href="https://ecom-iota-beryl.vercel.app" target="_blank">↗ Live site</a>
+      <a class="pill" href="https://github.com/jidemifilani/ecom" target="_blank">GitHub</a>
+    </div>
+  </header>
+
+  <!-- sidebar nav -->
+  <nav id="sidenav">
+    <h3>Contents</h3>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#stack">Tech stack</a></li>
+      <li><a href="#structure">File structure</a></li>
+      <li><a href="#database">Database models</a></li>
+      <li><a href="#api">API routes</a></li>
+      <li><a href="#rbac">RBAC &amp; permissions</a></li>
+      <li><a href="#admin">Admin panel</a></li>
+      <li><a href="#storefront">Storefront</a></li>
+      <li><a href="#auth">Auth system</a></li>
+      <li><a href="#env">Environment vars</a></li>
+      <li><a href="#dev">Dev workflow</a></li>
+      <li><a href="#deploy">Deployment</a></li>
+      <li><a href="#demo">Demo data</a></li>
+    </ul>
+  </nav>
+
+  <!-- main -->
+  <main>
+
+    <!-- OVERVIEW -->
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>Ecom is a multipurpose, market-adaptable full-stack e-commerce platform with an enterprise admin back-office and a consumer storefront. It is a production-grade, single-repo Next.js application.</p>
+      <div class="stats">
+        <div class="stat"><div class="stat-num">37</div><div class="stat-label">DB models</div></div>
+        <div class="stat"><div class="stat-num">69</div><div class="stat-label">API routes</div></div>
+        <div class="stat"><div class="stat-num">55</div><div class="stat-label">Permissions</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label">Staff roles</div></div>
+        <div class="stat"><div class="stat-num">24</div><div class="stat-label">Demo products</div></div>
+        <div class="stat"><div class="stat-num">46</div><div class="stat-label">Admin pages</div></div>
+        <div class="stat"><div class="stat-num">13</div><div class="stat-label">Storefront pages</div></div>
+      </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section id="stack">
+      <h2>Tech stack</h2>
+      <div class="cols2">
+        <div class="card">
+          <div class="card-title">Frontend</div>
+          <ul>
+            <li>Next.js <code>16.4.5</code> — App Router, RSC</li>
+            <li>React <code>19.3.1</code></li>
+            <li>TypeScript <code>5.9.3</code> strict mode</li>
+            <li>Tailwind CSS <code>4.3.4</code></li>
+            <li>Radix UI primitives (12 packages)</li>
+            <li>React Hook Form + Zod validation</li>
+            <li>Recharts for dashboard charts</li>
+            <li>Lucide React icons</li>
+            <li>Sonner toasts</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Backend</div>
+          <ul>
+            <li>Next.js Route Handlers (API)</li>
+            <li>Prisma <code>7.10.1</code> + <code>@prisma/adapter-pg</code></li>
+            <li>PostgreSQL 17 (local Docker)</li>
+            <li>Neon serverless Postgres (production)</li>
+            <li>bcryptjs for password hashing</li>
+            <li>jose for JWT (password-reset tokens)</li>
+            <li>nodemailer for transactional email</li>
+            <li>DB-backed opaque sessions</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Security</div>
+          <ul>
+            <li>CSRF: Origin/Host check + double-submit cookie <code>ecom_csrf</code></li>
+            <li>Rate limiting (DB-backed counters)</li>
+            <li>Login lockout after 5 attempts</li>
+            <li>RBAC: 55 permissions, authority levels</li>
+            <li>Separate staff / shopper session cookies</li>
+            <li>Entra ID SSO (optional, feature-flagged)</li>
+            <li>Zod server-env validation at boot</li>
+            <li>Audit log on every mutation</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Tooling &amp; testing</div>
+          <ul>
+            <li>Vitest (unit + component + integration)</li>
+            <li>Playwright E2E on port 3100</li>
+            <li>ESLint + Prettier</li>
+            <li>Docker Compose (local Postgres)</li>
+            <li>Vercel CLI for deployment</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILE STRUCTURE -->
+    <section id="structure">
+      <h2>File structure</h2>
+      <pre>ecom/
+├── prisma/
+│   ├── schema.prisma          37 models, 1 migration
+│   ├── seed.ts                demo data seeder
+│   ├── update-images.ts       Unsplash photo seeder
+│   └── fix-broken-images.ts   patch broken photo IDs
+├── src/
+│   ├── app/
+│   │   ├── (admin)/           admin panel pages + layouts
+│   │   ├── (auth)/            staff login / password reset
+│   │   ├── (shop)/            storefront pages
+│   │   └── api/               route handlers
+│   │       ├── auth/          session, login, password flows
+│   │       ├── shop/          cart, checkout, reviews
+│   │       └── v1/            REST API (admin operations)
+│   ├── components/
+│   │   ├── charts/            Recharts wrappers
+│   │   ├── data/              DataTable, FilterBar, ExportButton
+│   │   ├── layout/            AdminShell, Sidebar, MobileNav
+│   │   ├── shop/              ProductCard, ShopHeader, AddToCart
+│   │   └── ui/                Button, Card, Form, Table, etc.
+│   ├── lib/                   shared utilities
+│   ├── server/                service layer (one file per domain)
+│   ├── validation/            Zod schemas per domain
+│   ├── hooks/                 React hooks
+│   └── types/
+├── tests/e2e/
+│   ├── admin.spec.ts
+│   └── storefront.spec.ts
+└── public/demo/               category SVG placeholders</pre>
+    </section>
+
+    <!-- DATABASE -->
+    <section id="database">
+      <h2>Database models</h2>
+      <p>Single PostgreSQL database; Prisma manages migrations. One migration file: <code>20261104144809_init</code>.</p>
+      <h3>Auth &amp; access control</h3>
+      <div class="model-grid">
+        <div class="model-chip auth">User</div>
+        <div class="model-chip auth">Role</div>
+        <div class="model-chip auth">Permission</div>
+        <div class="model-chip auth">RolePermission</div>
+        <div class="model-chip auth">UserRole</div>
+        <div class="model-chip auth">Session</div>
+        <div class="model-chip auth">PasswordResetToken</div>
+        <div class="model-chip auth">LoginAttempt</div>
+        <div class="model-chip auth">RateLimitCounter</div>
+      </div>
+      <h3>Catalog</h3>
+      <div class="model-grid">
+        <div class="model-chip catalog">Brand</div>
+        <div class="model-chip catalog">Category</div>
+        <div class="model-chip catalog">Product</div>
+        <div class="model-chip catalog">ProductImage</div>
+        <div class="model-chip catalog">ProductOption</div>
+        <div class="model-chip catalog">ProductOptionValue</div>
+        <div class="model-chip catalog">ProductVariant</div>
+        <div class="model-chip catalog">VariantOptionValue</div>
+        <div class="model-chip catalog">InventoryItem</div>
+        <div class="model-chip catalog">StockMovement</div>
+        <div class="model-chip catalog">Review</div>
+      </div>
+      <h3>Orders &amp; commerce</h3>
+      <div class="model-grid">
+        <div class="model-chip order">Customer</div>
+        <div class="model-chip order">Address</div>
+        <div class="model-chip order">Cart</div>
+        <div class="model-chip order">CartItem</div>
+        <div class="model-chip order">Order</div>
+        <div class="model-chip order">OrderItem</div>
+        <div class="model-chip order">OrderAddress</div>
+        <div class="model-chip order">Payment</div>
+        <div class="model-chip order">Shipment</div>
+        <div class="model-chip order">Refund</div>
+        <div class="model-chip order">OrderEvent</div>
+        <div class="model-chip order">Discount</div>
+        <div class="model-chip order">DiscountRedemption</div>
+      </div>
+      <h3>System</h3>
+      <div class="model-grid">
+        <div class="model-chip sys">Notification</div>
+        <div class="model-chip sys">AuditLog</div>
+        <div class="model-chip sys">Setting</div>
+        <div class="model-chip sys">Counter</div>
+      </div>
+    </section>
+
+    <!-- API ROUTES -->
+    <section id="api">
+      <h2>API routes</h2>
+      <p>All handlers live under <code>src/app/api/</code>. Admin routes require a valid staff session and check RBAC permissions. Shop routes use a separate shopper session cookie.</p>
+
+      <h3>Auth — Staff</h3>
+      <div class="route-group">
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/login</span><span class="route-desc">Staff sign-in, issues <code>ecom_session</code> cookie</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/logout</span><span class="route-desc">Invalidates session</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/auth/session</span><span class="route-desc">Returns current staff user</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/forgot-password</span><span class="route-desc">Sends reset email</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/reset-password</span><span class="route-desc">Consumes token, sets new password</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/change-password</span><span class="route-desc">Authenticated password change</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/auth/entra/start</span><span class="route-desc">Redirects to Entra ID (optional SSO)</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/auth/entra/callback</span><span class="route-desc">Handles OIDC callback</span></div>
+      </div>
+
+      <h3>Auth — Shoppers</h3>
+      <div class="route-group">
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/shop/register</span><span class="route-desc">Create shopper account</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/shop/login</span><span class="route-desc">Issues <code>ecom_shop_session</code> cookie</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/shop/logout</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/shop/forgot-password</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/auth/shop/reset-password</span></div>
+      </div>
+
+      <h3>Shop (storefront)</h3>
+      <div class="route-group">
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/shop/cart</span><span class="route-desc">Fetch cart (session or guest)</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/shop/cart/items</span><span class="route-desc">Add item to cart</span></div>
+        <div class="route-row"><span class="method PATCH">PATCH</span><span class="route-path">/api/shop/cart/items</span><span class="route-desc">Update qty / remove item</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/shop/cart/discount</span><span class="route-desc">Apply discount code</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/shop/cart/clear</span><span class="route-desc">Empty the cart</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/shop/checkout</span><span class="route-desc">Place order, returns order number</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/shop/reviews</span><span class="route-desc">Submit a product review</span></div>
+      </div>
+
+      <h3>Admin REST — <code>/api/v1/</code></h3>
+      <div class="route-group">
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/dashboard</span><span class="route-desc">KPI tiles and revenue chart data</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/products</span> <span class="method POST">POST</span><span class="route-desc">List / create products</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/products/[id]</span> <span class="method PATCH">PATCH</span> <span class="method DELETE">DELETE</span><span class="route-desc">Read / update / archive</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/products/[id]/variants</span> <span class="method POST">POST</span><span class="route-desc">Variant management</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/categories</span> <span class="method POST">POST</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/brands</span> <span class="method POST">POST</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/orders</span> <span class="method POST">POST</span></div>
+        <div class="route-row"><span class="method PATCH">PATCH</span><span class="route-path">/api/v1/orders/[id]/status</span><span class="route-desc">Update order status</span></div>
+        <div class="route-row"><span class="method POST">POST</span><span class="route-path">/api/v1/orders/[id]/fulfill</span> <span class="method POST">POST</span><span class="route-path">/api/v1/orders/[id]/cancel</span> <span class="method POST">POST</span><span class="route-path">/api/v1/orders/[id]/refund</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/customers</span> <span class="method POST">POST</span> · <code>/[id]</code> PATCH/DELETE · <code>/[id]/addresses</code></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/inventory</span> <span class="method POST">POST</span><span class="route-path">/api/v1/inventory/adjust</span> <span class="method POST">POST</span><span class="route-path">/api/v1/inventory/set-level</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/discounts</span> · CRUD on <code>/[id]</code></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/notifications</span> · <code>/[id]/read</code> · <code>/read-all</code></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/audit-logs</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/exports/[resource]</span><span class="route-desc">CSV export (orders, products, customers…)</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/v1/permissions</span><span class="route-desc">Returns full permission catalogue</span></div>
+        <div class="route-row"><span class="method GET">GET</span><span class="route-path">/api/health</span><span class="route-desc">Liveness probe</span></div>
+      </div>
+    </section>
+
+    <!-- RBAC -->
+    <section id="rbac">
+      <h2>RBAC &amp; permissions</h2>
+      <p>Permissions follow the pattern <code>resource.action</code>. Each staff user has one or more roles; roles carry a permission set and an authority level (higher levels cannot be managed by lower levels).</p>
+
+      <h3>Roles</h3>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:20px;">
+        <div class="role-row"><span class="role-name">super_admin</span><span class="role-count">55 perms</span><span class="role-desc">All permissions, authority level 100. Created by seed.</span></div>
+        <div class="role-row"><span class="role-name">admin</span><span class="role-count">52 perms</span><span class="role-desc">Everything except system settings and audit export.</span></div>
+        <div class="role-row"><span class="role-name">manager</span><span class="role-count">40 perms</span><span class="role-desc">Catalog, orders, customers, inventory, discounts, reports.</span></div>
+        <div class="role-row"><span class="role-name">staff</span><span class="role-count">12 perms</span><span class="role-desc">Read-only catalog + orders + inventory.</span></div>
+      </div>
+
+      <h3>Permission groups</h3>
+      <div class="perm-group">
+        <div class="perm-group-title">Dashboard <span class="chip">2</span></div>
+        <div class="perm-list">
+          <span class="perm-key">dashboard.view</span>
+          <span class="perm-key">dashboard.view_financials</span>
+        </div>
+      </div>
+      <div class="perm-group">
+        <div class="perm-group-title">Access control <span class="chip">9</span></div>
+        <div class="perm-list">
+          <span class="perm-key">user.read</span><span class="perm-key">user.create</span><span class="perm-key">user.update</span><span class="perm-key">user.delete</span><span class="perm-key">user.export</span><span class="perm-key">user.assign_roles</span><span class="perm-key">user.reset_password</span><span class="perm-key">user.revoke_sessions</span><span class="perm-key">role.read</span><span class="perm-key">role.create</span><span class="perm-key">role.update</span><span class="perm-key">role.delete</span>
+        </div>
+      </div>
+      <div class="perm-group">
+        <div class="perm-group-title">Catalog <span class="chip">13</span></div>
+        <div class="perm-list">
+          <span class="perm-key">product.read</span><span class="perm-key">product.create</span><span class="perm-key">product.update</span><span class="perm-key">product.delete</span><span class="perm-key">product.export</span><span class="perm-key">category.read</span><span class="perm-key">category.create</span><span class="perm-key">category.update</span><span class="perm-key">category.delete</span><span class="perm-key">brand.read</span><span class="perm-key">brand.create</span><span class="perm-key">brand.update</span><span class="perm-key">brand.delete</span><span class="perm-key">review.read</span><span class="perm-key">review.moderate</span>
+        </div>
+      </div>
+      <div class="perm-group">
+        <div class="perm-group-title">Inventory <span class="chip">3</span></div>
+        <div class="perm-list">
+          <span class="perm-key">inventory.read</span><span class="perm-key">inventory.adjust</span><span class="perm-key">inventory.export</span>
+        </div>
+      </div>
+      <div class="perm-group">
+        <div class="perm-group-title">Sales <span class="chip">9</span></div>
+        <div class="perm-list">
+          <span class="perm-key">order.read</span><span class="perm-key">order.create</span><span class="perm-key">order.update</span><span class="perm-key">order.fulfill</span><span class="perm-key">order.cancel</span><span class="perm-key">order.refund</span><span class="perm-key">order.delete</span><span class="perm-key">order.export</span>
+        </div>
+      </div>
+      <div class="perm-group">
+        <div class="perm-group-title">Customers <span class="chip">5</span></div>
+        <div class="perm-list">
+          <span class="perm-key">customer.read</span><span class="perm-key">customer.create</span><span class="perm-key">customer.update</span><span class="perm-key">customer.delete</span><span class="perm-key">customer.export</span>
+        </div>
+      </div>
+      <div class="perm-group">
+        <div class="perm-group-title">Marketing <span class="chip">4</span></div>
+        <div class="perm-list">
+          <span class="perm-key">discount.read</span><span class="perm-key">discount.create</span><span class="perm-key">discount.update</span><span class="perm-key">discount.delete</span>
+        </div>
+      </div>
+      <div class="perm-group">
+        <div class="perm-group-title">Insights <span class="chip">2</span></div>
+        <div class="perm-list">
+          <span class="perm-key">report.read</span><span class="perm-key">report.export</span>
+        </div>
+      </div>
+      <div class="perm-group">
+        <div class="perm-group-title">System <span class="chip">4</span></div>
+        <div class="perm-list">
+          <span class="perm-key">audit_log.read</span><span class="perm-key">audit_log.export</span><span class="perm-key">setting.read</span><span class="perm-key">setting.update</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin">
+      <h2>Admin panel</h2>
+      <p>Reached at <code>/login</code> → redirects to <code>/dashboard</code>. All pages require an authenticated staff session.</p>
+      <div class="cols3">
+        <div class="card">
+          <div class="card-title">Dashboard</div>
+          <ul>
+            <li>Revenue / orders KPI tiles</li>
+            <li>Sales-over-time chart</li>
+            <li>Recent orders table</li>
+            <li>Low-stock alerts</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Catalog</div>
+          <ul>
+            <li>Products list + create/edit form</li>
+            <li>Variant manager (options + values)</li>
+            <li>Categories (tree)</li>
+            <li>Brands</li>
+            <li>Review moderation queue</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Inventory</div>
+          <ul>
+            <li>Stock levels per variant</li>
+            <li>Adjust / receive stock</li>
+            <li>Movement history</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Orders</div>
+          <ul>
+            <li>Order list with filters</li>
+            <li>Order detail + timeline</li>
+            <li>Fulfill / cancel / refund</li>
+            <li>Payment records</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Customers</div>
+          <ul>
+            <li>Customer list + create</li>
+            <li>Customer detail + order history</li>
+            <li>Address management</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Marketing</div>
+          <ul>
+            <li>Discount codes (fixed / % / free shipping)</li>
+            <li>Min spend, usage limits, expiry</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Staff &amp; Access</div>
+          <ul>
+            <li>Users list + invite form</li>
+            <li>Role builder with permission checkboxes</li>
+            <li>Assign/remove roles per user</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">System</div>
+          <ul>
+            <li>21 configurable app settings</li>
+            <li>Audit log (filterable, exportable)</li>
+            <li>Notifications inbox</li>
+            <li>Reports page (revenue, inventory)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- STOREFRONT -->
+    <section id="storefront">
+      <h2>Storefront</h2>
+      <p>Consumer-facing app mounted at <code>/</code>. Shoppers can browse, add to cart, and check out as a guest or registered account.</p>
+      <div class="cols2">
+        <div class="card">
+          <div class="card-title">Pages</div>
+          <ul>
+            <li><code>/</code> — Home: featured products + categories</li>
+            <li><code>/c/[slug]</code> — Category listing</li>
+            <li><code>/p/[slug]</code> — Product detail + reviews</li>
+            <li><code>/search</code> — Search results</li>
+            <li><code>/cart</code> — Cart with discount code input</li>
+            <li><code>/checkout</code> — Guest or logged-in checkout</li>
+            <li><code>/order/[number]</code> — Order confirmation</li>
+            <li><code>/account</code> — Profile, order history</li>
+            <li><code>/account/login</code> — Shopper sign-in</li>
+            <li><code>/account/register</code> — Shopper registration</li>
+            <li><code>/account/forgot-password</code></li>
+            <li><code>/account/orders</code> — Order history list</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Commerce features</div>
+          <ul>
+            <li>Product variants (colour, size, etc.)</li>
+            <li>Add-to-cart with async optimistic UI</li>
+            <li>Persistent cart (DB-backed, guest + logged-in)</li>
+            <li>Discount code redemption at cart</li>
+            <li>Guest checkout (no account required)</li>
+            <li>Order confirmation page + email</li>
+            <li>Product review form (authenticated shoppers)</li>
+            <li>Compare-at price / sale badges</li>
+            <li>Category breadcrumb navigation</li>
+            <li>Responsive layout, dark mode support</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTH -->
+    <section id="auth">
+      <h2>Auth system</h2>
+      <div class="cols2">
+        <div class="card">
+          <div class="card-title">Staff auth (admin)</div>
+          <ul>
+            <li>Cookie: <code>ecom_session</code> (HttpOnly, Secure, SameSite=Lax)</li>
+            <li>Sessions stored in <code>Session</code> DB table</li>
+            <li>Idle timeout: 30 days (configurable)</li>
+            <li>Absolute timeout: 90 days (configurable)</li>
+            <li>Lockout after 5 failed attempts (900s)</li>
+            <li>Password reset via signed JWT emailed link</li>
+            <li>Entra ID SSO (optional, <code>AUTH_ENTRA_ENABLED=true</code>)</li>
+            <li>Force password change flag on first login</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Shopper auth (storefront)</div>
+          <ul>
+            <li>Cookie: <code>ecom_shop_session</code></li>
+            <li>Same DB-backed session mechanism</li>
+            <li>Register, login, forgot / reset password</li>
+            <li>Guest cart merges on login</li>
+            <li>Separate from staff sessions entirely</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">CSRF protection</div>
+          <ul>
+            <li>Double-submit cookie: <code>ecom_csrf</code></li>
+            <li>Origin header checked against <code>APP_URL</code></li>
+            <li>Falls back to Host-derived origin</li>
+            <li>Applied to all mutating API routes</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Password policy</div>
+          <ul>
+            <li>Minimum 12 characters (configurable)</li>
+            <li>bcrypt cost factor 12 (configurable)</li>
+            <li>No common-password check (can add)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENV -->
+    <section id="env">
+      <h2>Environment variables</h2>
+      <p>Validated at boot by Zod in <code>src/lib/env.ts</code>. Missing required vars crash the process immediately with a descriptive error.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Variable</th><th>Required</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>DATABASE_URL</code></td><td><span class="env-required">required</span></td><td>—</td><td>Pooled Postgres connection string</td></tr>
+            <tr><td><code>DATABASE_URL_UNPOOLED</code></td><td><span class="env-optional">optional</span></td><td>—</td><td>Direct connection (migrations, scripts)</td></tr>
+            <tr><td><code>AUTH_SECRET</code></td><td><span class="env-required">required</span></td><td>—</td><td>≥32 char random string for session signing</td></tr>
+            <tr><td><code>APP_URL</code></td><td><span class="env-optional">optional</span></td><td><code>http://localhost:3000</code></td><td>Public URL; used for CSRF and email links</td></tr>
+            <tr><td><code>NODE_ENV</code></td><td><span class="env-optional">optional</span></td><td><code>development</code></td><td>development / test / production</td></tr>
+            <tr><td><code>MAIL_TRANSPORT</code></td><td><span class="env-optional">optional</span></td><td><code>log</code></td><td>smtp or log (log prints to console)</td></tr>
+            <tr><td><code>MAIL_FROM</code></td><td><span class="env-optional">optional</span></td><td><code>Ecom &lt;no-reply@example.com&gt;</code></td><td>From address on outbound mail</td></tr>
+            <tr><td><code>SMTP_HOST</code></td><td><span class="env-optional">optional</span></td><td>—</td><td>Required when MAIL_TRANSPORT=smtp</td></tr>
+            <tr><td><code>SMTP_PORT</code></td><td><span class="env-optional">optional</span></td><td><code>587</code></td><td></td></tr>
+            <tr><td><code>SMTP_SECURE</code></td><td><span class="env-optional">optional</span></td><td><code>false</code></td><td>true for port 465</td></tr>
+            <tr><td><code>SMTP_USER</code></td><td><span class="env-optional">optional</span></td><td>—</td><td></td></tr>
+            <tr><td><code>SMTP_PASSWORD</code></td><td><span class="env-optional">optional</span></td><td>—</td><td></td></tr>
+            <tr><td><code>AUTH_ENTRA_ENABLED</code></td><td><span class="env-optional">optional</span></td><td><code>false</code></td><td>Enable Entra ID SSO</td></tr>
+            <tr><td><code>ENTRA_TENANT_ID</code></td><td><span class="env-optional">if Entra</span></td><td>—</td><td></td></tr>
+            <tr><td><code>ENTRA_CLIENT_ID</code></td><td><span class="env-optional">if Entra</span></td><td>—</td><td></td></tr>
+            <tr><td><code>ENTRA_CLIENT_SECRET</code></td><td><span class="env-optional">if Entra</span></td><td>—</td><td></td></tr>
+            <tr><td><code>LOGIN_MAX_ATTEMPTS</code></td><td><span class="env-optional">optional</span></td><td><code>5</code></td><td></td></tr>
+            <tr><td><code>LOGIN_LOCKOUT_SECONDS</code></td><td><span class="env-optional">optional</span></td><td><code>900</code></td><td></td></tr>
+            <tr><td><code>SESSION_IDLE_TIMEOUT_SECONDS</code></td><td><span class="env-optional">optional</span></td><td><code>2592000</code> (30d)</td><td></td></tr>
+            <tr><td><code>PASSWORD_MIN_LENGTH</code></td><td><span class="env-optional">optional</span></td><td><code>12</code></td><td></td></tr>
+            <tr><td><code>BCRYPT_COST</code></td><td><span class="env-optional">optional</span></td><td><code>12</code></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DEV WORKFLOW -->
+    <section id="dev">
+      <h2>Dev workflow</h2>
+      <div class="cols2">
+        <div class="card">
+          <div class="card-title">Common commands</div>
+          <pre style="margin:0;font-size:11.5px;">npm run dev              # Next.js dev server :3000
+npm run build            # prisma generate + next build
+npm run typecheck        # tsc --noEmit
+npm run lint             # ESLint
+npm run test             # Vitest (all projects)
+npm run test:unit        # unit tests only
+npm run test:integration # integration tests only
+npm run e2e              # Playwright (port 3100)
+npm run db:migrate       # run pending migrations
+npm run db:seed          # seed demo data
+npm run db:studio        # Prisma Studio
+npm run docker:up        # start local Postgres</pre>
+        </div>
+        <div class="card">
+          <div class="card-title">Local setup</div>
+          <ul>
+            <li>Node ≥ 20.11.0</li>
+            <li>Docker Desktop for local Postgres</li>
+            <li>Copy <code>.env.example</code> → <code>.env.local</code></li>
+            <li>Set <code>AUTH_SECRET</code> (openssl rand -base64 32)</li>
+            <li>Run <code>npm run docker:up</code></li>
+            <li>Run <code>npm run db:migrate</code></li>
+            <li>Run <code>npm run db:seed</code></li>
+            <li>Run <code>npm run dev</code></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">E2E test setup</div>
+          <ul>
+            <li>Set <code>APP_URL=http://localhost:3100</code> in <code>.env.test</code></li>
+            <li>Run <code>npm run test:db:setup</code> (separate test DB)</li>
+            <li>Start dev server on port 3100</li>
+            <li>Run <code>npm run e2e</code></li>
+            <li>Coverage: admin login, bad-creds, form validation</li>
+            <li>Coverage: storefront browse, add-to-cart, checkout flow</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">One-off DB scripts</div>
+          <ul>
+            <li><code>npx tsx prisma/update-images.ts</code> — set all 24 product photos to Unsplash URLs</li>
+            <li><code>npx tsx prisma/fix-broken-images.ts</code> — patch expired photo IDs</li>
+            <li>Both use <code>DATABASE_URL_UNPOOLED</code> from <code>.env.local</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEPLOYMENT -->
+    <section id="deploy">
+      <h2>Deployment</h2>
+      <div class="cols2">
+        <div class="card">
+          <div class="card-title">Vercel (production)</div>
+          <ul>
+            <li>Project: <code>jidemifilanis-projects/ecom</code></li>
+            <li>Live URL: <code>ecom-iota-beryl.vercel.app</code></li>
+            <li>GitHub: <code>jidemifilani/ecom</code> (public)</li>
+            <li>Output mode: <code>standalone</code></li>
+            <li>Deployment protection: disabled (public)</li>
+            <li>Command: <code>vercel --prod --yes</code></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Neon database</div>
+          <ul>
+            <li>Resource: <code>ecom-db</code> (free tier, <code>free_v3</code>)</li>
+            <li>Linked to Vercel project via integration</li>
+            <li>Pooled URL: <code>POSTGRES_URL</code> / <code>DATABASE_URL</code></li>
+            <li>Direct URL: <code>DATABASE_URL_UNPOOLED</code></li>
+            <li>Migrations run via <code>db:migrate:deploy</code></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Required Vercel env vars</div>
+          <ul>
+            <li><code>DATABASE_URL</code> — set by Neon integration</li>
+            <li><code>DATABASE_URL_UNPOOLED</code> — set by Neon integration</li>
+            <li><code>AUTH_SECRET</code> — set manually (≥32 chars)</li>
+            <li><code>APP_URL</code> — set to <code>https://ecom-iota-beryl.vercel.app</code></li>
+            <li>SMTP vars — optional (email logs to console if unset)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Build notes</div>
+          <ul>
+            <li>Build runs <code>prisma generate</code> then <code>next build</code></li>
+            <li><code>NEXT_PHASE=phase-production-build</code> set during build</li>
+            <li>Production-only env checks are skipped during build phase</li>
+            <li>Prisma client output: <code>src/generated/prisma/</code></li>
+            <li>serverExternalPackages: <code>@prisma/client</code>, <code>pg</code>, <code>bcryptjs</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO DATA -->
+    <section id="demo">
+      <h2>Demo data (seeded)</h2>
+      <div class="stats">
+        <div class="stat"><div class="stat-num">24</div><div class="stat-label">Products</div></div>
+        <div class="stat"><div class="stat-num">8</div><div class="stat-label">Categories</div></div>
+        <div class="stat"><div class="stat-num">5</div><div class="stat-label">Brands</div></div>
+        <div class="stat"><div class="stat-num">12</div><div class="stat-label">Customers</div></div>
+        <div class="stat"><div class="stat-num">36</div><div class="stat-label">Orders</div></div>
+        <div class="stat"><div class="stat-num">24</div><div class="stat-label">Reviews</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label">Discounts</div></div>
+        <div class="stat"><div class="stat-num">21</div><div class="stat-label">Settings</div></div>
+      </div>
+      <div class="cols2">
+        <div class="card">
+          <div class="card-title">Admin login</div>
+          <ul>
+            <li>Email: <code>admin@example.com</code></li>
+            <li>Password: set on first sign-in (force-change flag)</li>
+            <li>Role: <code>super_admin</code></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Product categories</div>
+          <ul>
+            <li>Audio (Headphones, Speakers)</li>
+            <li>Wearables (Smartwatches, Trackers)</li>
+            <li>Home &amp; Living (Lighting, Storage)</li>
+            <li>Apparel (Tops, Outerwear)</li>
+            <li>Outdoors (Camping, Cycling)</li>
+            <li>Office (Desk, Stationery)</li>
+            <li>Kitchen · Fitness</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// Highlight active nav link on scroll
+const sections = document.querySelectorAll('section[id]');
+const links    = document.querySelectorAll('nav a');
+
+const obs = new IntersectionObserver(entries => {
+  for (const e of entries) {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  }
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => obs.observe(s));
+</script>
