@@ -16,7 +16,7 @@ const PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? process.env.SEED_SUPER_ADMIN_
 const signIn = async (page: import('@playwright/test').Page): Promise<void> => {
   await page.goto('/login');
   await page.getByLabel(/email address/i).fill(EMAIL as string);
-  await page.getByLabel(/^password$/i).fill(PASSWORD as string);
+  await page.getByRole('textbox', { name: /password/i }).fill(PASSWORD as string);
   await page.getByRole('button', { name: /^sign in$/i }).click();
 };
 
@@ -41,10 +41,11 @@ test.describe('back office authentication', () => {
     await page.goto('/login');
 
     await page.getByLabel(/email address/i).fill('nobody@example.com');
-    await page.getByLabel(/^password$/i).fill('definitely-not-correct-1!');
+    await page.getByRole('textbox', { name: /password/i }).fill('definitely-not-correct-1!');
     await page.getByRole('button', { name: /^sign in$/i }).click();
 
-    const alert = page.getByRole('alert').first();
+    // Skip the Next.js route-announcer (always present, always empty).
+    const alert = page.getByRole('alert').filter({ hasText: /\S/ });
     await expect(alert).toBeVisible();
 
     // The message must not reveal whether the account exists.
@@ -56,7 +57,7 @@ test.describe('back office authentication', () => {
     await page.goto('/login');
 
     await page.getByLabel(/email address/i).fill('not-an-email');
-    await page.getByLabel(/^password$/i).fill('x');
+    await page.getByRole('textbox', { name: /password/i }).fill('x');
     await page.getByRole('button', { name: /^sign in$/i }).click();
 
     await expect(page.getByText(/enter a valid email address/i)).toBeVisible();

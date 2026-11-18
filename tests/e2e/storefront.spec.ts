@@ -21,7 +21,7 @@ test.describe('storefront', () => {
     await expect(productLinks.first()).toBeVisible();
 
     await expect(page.getByRole('search')).toBeVisible();
-    await expect(page.getByRole('link', { name: /basket/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /basket/i }).first()).toBeVisible();
   });
 
   test('search finds a seeded product', async ({ page }) => {
@@ -42,6 +42,7 @@ test.describe('storefront', () => {
 
     // Open the first product.
     await page.locator('a[href^="/p/"]').first().click();
+    await page.waitForURL(/\/p\//);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
     const addButton = page.getByRole('button', { name: /add to basket/i });
@@ -64,7 +65,9 @@ test.describe('storefront', () => {
   test('quantity can be changed in the basket and the total follows', async ({ page }) => {
     await page.goto('/');
     await page.locator('a[href^="/p/"]').first().click();
+    await page.waitForURL(/\/p\//);
     await page.getByRole('button', { name: /add to basket/i }).click();
+    await expect(page.getByRole('link', { name: /go to basket/i })).toBeVisible();
     await page.goto('/cart');
 
     const increase = page.getByRole('button', { name: /increase quantity/i }).first();
@@ -77,7 +80,9 @@ test.describe('storefront', () => {
   test('checkout rejects an incomplete form with field-level messages', async ({ page }) => {
     await page.goto('/');
     await page.locator('a[href^="/p/"]').first().click();
+    await page.waitForURL(/\/p\//);
     await page.getByRole('button', { name: /add to basket/i }).click();
+    await expect(page.getByRole('link', { name: /go to basket/i })).toBeVisible();
     await page.goto('/checkout');
 
     await page.getByRole('button', { name: /place order/i }).click();
@@ -89,15 +94,17 @@ test.describe('storefront', () => {
   test('a guest can complete checkout and sees a confirmed order', async ({ page }) => {
     await page.goto('/');
     await page.locator('a[href^="/p/"]').first().click();
+    await page.waitForURL(/\/p\//);
     await page.getByRole('button', { name: /add to basket/i }).click();
+    await expect(page.getByRole('link', { name: /go to basket/i })).toBeVisible();
     await page.goto('/checkout');
 
     const unique = Date.now();
     await page.getByLabel(/email address/i).fill(`e2e.buyer.${unique}@example.com`);
-    await page.getByLabel(/^first name$/i).fill('Playwright');
-    await page.getByLabel(/^last name$/i).fill('Buyer');
+    await page.getByLabel(/first name/i).fill('Playwright');
+    await page.getByLabel(/last name/i).fill('Buyer');
     await page.getByLabel(/address line 1/i).fill('1 Automation Way');
-    await page.getByLabel(/^city$/i).fill('Bristol');
+    await page.getByLabel(/city/i).fill('Bristol');
     await page.getByLabel(/postcode/i).fill('BS1 4AA');
 
     await page.getByRole('button', { name: /place order/i }).click();
