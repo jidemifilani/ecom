@@ -84,12 +84,10 @@ const serverEnvSchema = z
 
     if (env.NODE_ENV === 'production' && !isBuildPhase) {
       if (env.MAIL_TRANSPORT === 'log') {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['MAIL_TRANSPORT'],
-          message:
-            'MAIL_TRANSPORT=log discards mail. Configure SMTP before running in production.',
-        });
+        // Warn rather than throw so demo deployments without SMTP can still run.
+        console.warn(
+          '[env] MAIL_TRANSPORT=log discards all outbound mail. Set MAIL_TRANSPORT=smtp before going live.',
+        );
       }
       if (env.MAIL_TRANSPORT === 'smtp' && !env.SMTP_HOST) {
         ctx.addIssue({
