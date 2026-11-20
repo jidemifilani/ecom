@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, PackageCheck, ShieldCheck, Truck } from 'lucide-react';
 
+import { HeroSlider } from '@/components/shop/hero-slider';
 import { ProductGrid, ProductImage } from '@/components/shop/product-card';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/feedback';
@@ -65,41 +66,41 @@ const HomePage = async () => {
 
   return (
     <>
-      {/* ── Hero ── */}
-      <section className="border-line border-b">
-        <div className="mx-auto w-full max-w-[90rem] px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
-          <div className="max-w-2xl">
-            <p className="text-accent text-sm font-semibold tracking-wide uppercase">
-              {config.name}
-            </p>
-            <h1 className="text-fg mt-3 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-              {config.tagline || 'Everything you need, one storefront.'}
-            </h1>
-            <p className="text-fg-muted mt-4 max-w-xl text-base leading-relaxed">
-              Browse the full catalogue, check stock in real time and check out in a few steps.
-              {config.freeShippingThresholdMinor > 0
-                ? ` Free delivery on orders over ${formatMoney(config.freeShippingThresholdMinor, config.currency, config.locale)}.`
-                : ''}
-            </p>
-
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button size="lg" asChild>
-                <Link href="/search">
-                  Shop everything
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
-              {topCategories[0] ? (
-                <Button size="lg" variant="outline" asChild>
-                  <Link href={`/c/${topCategories[0].slug}`}>
-                    Browse {topCategories[0].name}
+      {/* ── Hero slider ── */}
+      {highlight.items.length > 0 ? (
+        <HeroSlider
+          products={highlight.items.slice(0, 6)}
+          locale={config.locale}
+          storeName={config.name}
+        />
+      ) : (
+        <section className="border-line border-b">
+          <div className="mx-auto w-full max-w-[90rem] px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
+            <div className="max-w-2xl">
+              <p className="text-accent text-sm font-semibold tracking-wide uppercase">
+                {config.name}
+              </p>
+              <h1 className="text-fg mt-3 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+                {config.tagline || 'Everything you need, one storefront.'}
+              </h1>
+              <p className="text-fg-muted mt-4 max-w-xl text-base leading-relaxed">
+                Browse the full catalogue, check stock in real time and check out in a few steps.
+                {config.freeShippingThresholdMinor > 0
+                  ? ` Free delivery on orders over ${formatMoney(config.freeShippingThresholdMinor, config.currency, config.locale)}.`
+                  : ''}
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Button size="lg" asChild>
+                  <Link href="/search">
+                    Shop everything
+                    <ArrowRight aria-hidden="true" />
                   </Link>
                 </Button>
-              ) : null}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Featured ── */}
       <section
